@@ -1,0 +1,21 @@
+{
+    "name": "schmunk42/yii2-markdocs-module",
+    "description": "Renders markdown files from local folder as views",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension"],
+    "license": "BSD_3-CLAUSE",
+    "authors": [
+        {
+            "name": "Tobias Munk",
+            "email": "schmunk@usrbin.de"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "schmunk42\\markdocs\\": ""
+        }
+    }
+}
