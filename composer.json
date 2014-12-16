@@ -3,7 +3,7 @@
     "description": "Renders markdown files from local folder as views",
     "type": "yii2-extension",
     "keywords": ["yii2","extension"],
-    "license": "BSD_3-CLAUSE",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Tobias Munk",
