@@ -25,7 +25,7 @@ class Bootstrap implements BootstrapInterface
      */
     public function bootstrap($app)
     {
-        if (!$app->hasModule('markdocs')) {
+        if (!$app->hasModule('docs')) {
             $app->setModule(
                 'docs',
                 [

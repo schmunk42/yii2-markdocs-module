@@ -9,11 +9,15 @@
 
 namespace schmunk42\markdocs\controllers;
 
+use yii\helpers\Markdown;
+use yii\helpers\Url;
+use yii\web\Controller;
+
 /**
  * Class DefaultController
  * @author Tobias Munk <tobias@diemeisterei.de>
  */
-class DefaultController {
+class DefaultController extends Controller {
     /**
      * Renders the documentation pages from github.com
      * @return string
@@ -35,7 +39,7 @@ class DefaultController {
             \Yii::$app->cache->set($cacheKey, $html, 300);
         }
 
-        $this->layout = 'container';
+        #$this->layout = 'container';
         return $this->render(
             'docs',
             [
@@ -55,7 +59,7 @@ class DefaultController {
     {
         $markdown = file_get_contents('https://raw.githubusercontent.com/phundament/app/master/docs/' . $file);
         $html     = Markdown::process($markdown, 'gfm');
-        $url      = Url::to(['site/docs', 'file' => '']);
+        $url      = Url::to(['/docs', 'file' => '']);
         $html     = preg_replace('/<a href="(?!http)(.+\.md)">/U', '<a href="__URL__/$1">', $html);
         $trans    = ['__URL__' => $url];
         $html     = strtr($html, $trans);
