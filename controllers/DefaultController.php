@@ -57,6 +57,7 @@ class DefaultController extends Controller {
      */
     private function createHtml($file)
     {
+        \Yii::trace("Creating HTML for '{$file}'", __METHOD__);
         $markdown = file_get_contents('https://raw.githubusercontent.com/phundament/app/master/docs/' . $file);
         $html     = Markdown::process($markdown, 'gfm');
         $url      = Url::to(['/docs', 'file' => '']);
