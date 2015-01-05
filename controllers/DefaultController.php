@@ -2,7 +2,7 @@
 /**
  * @link http://www.diemeisterei.de/
  * @copyright Copyright (c) 2014 diemeisterei GmbH, Stuttgart
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -17,7 +17,8 @@ use yii\web\Controller;
  * Class DefaultController
  * @author Tobias Munk <tobias@diemeisterei.de>
  */
-class DefaultController extends Controller {
+class DefaultController extends Controller
+{
     /**
      * Renders the documentation pages from github.com
      * @return string
@@ -60,10 +61,12 @@ class DefaultController extends Controller {
         \Yii::trace("Creating HTML for '{$file}'", __METHOD__);
         $markdown = file_get_contents('https://raw.githubusercontent.com/phundament/app/master/docs/' . $file);
         $html     = Markdown::process($markdown, 'gfm');
-        $url      = Url::to(['/docs', 'file' => '']);
-        $html     = preg_replace('/<a href="(?!http)(.+\.md)">/U', '<a href="__URL__/$1">', $html);
-        $trans    = ['__URL__' => $url];
-        $html     = strtr($html, $trans);
+        $html     = preg_replace('/<a href="(?!http)(.+\.md)">/U', '<a href="__INTERNAL_URL__$1">', $html);
+
+        $dummyUrl = Url::to(['/docs', 'file' => '__PLACEHOLDER__']);
+        $html     = strtr($html, ['__INTERNAL_URL__' => $dummyUrl]);
+        $html     = strtr($html, ['__PLACEHOLDER__' => '']);
+
         return $html;
     }
 
