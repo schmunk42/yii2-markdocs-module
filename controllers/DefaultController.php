@@ -37,17 +37,24 @@ class DefaultController extends Controller
         $html     = \Yii::$app->cache->get($cacheKey);
         if (!$html) {
             $html = $this->createHtml($file);
-            \Yii::$app->cache->set($cacheKey, $html, 300);
+            \Yii::$app->cache->set($cacheKey, $html, 1);
         }
 
-        #$this->layout = 'container';
+        // exract headline - TODO: this should be done with the Markdown parser
+        preg_match("/\<h[1-3]\>(.*)\<\/h[1-3]\>/", $html, $matches);
+        if (isset($matches[1])) {
+            $headline = $matches[1];
+        } else {
+            $headline = $file;
+        }
+
         return $this->render(
             'docs',
             [
                 'html'     => $html,
                 'toc'      => $toc,
-                'headline' => $file,
-                'forkUrl'  => 'https://github.com/phundament/app/blob/master/docs/' . $file
+                'headline' => $headline,
+                'forkUrl'  => $this->module->forkUrl . $file
             ]
         );
     }
@@ -59,7 +66,7 @@ class DefaultController extends Controller
     private function createHtml($file)
     {
         \Yii::trace("Creating HTML for '{$file}'", __METHOD__);
-        $markdown = file_get_contents('https://raw.githubusercontent.com/phundament/app/master/docs/' . $file);
+        $markdown = file_get_contents($this->module->markdownUrl . '/' . $file);
         $html     = Markdown::process($markdown, 'gfm');
         $html     = preg_replace('/<a href="(?!http)(.+\.md)">/U', '<a href="__INTERNAL_URL__$1">', $html);
 
