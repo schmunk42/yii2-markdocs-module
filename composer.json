@@ -17,8 +17,5 @@
         "psr-4": {
             "schmunk42\\markdocs\\": ""
         }
-    },
-    "extra": {
-        "bootstrap": "schmunk42\\markdocs\\Bootstrap"
     }
 }

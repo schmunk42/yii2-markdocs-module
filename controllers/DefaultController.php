@@ -9,6 +9,7 @@
 
 namespace schmunk42\markdocs\controllers;
 
+use yii\base\ErrorException;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -19,11 +20,12 @@ use yii\web\Controller;
  */
 class DefaultController extends Controller
 {
+
     /**
      * Renders the documentation pages from github.com
      * @return string
      */
-    public function actionIndex($file = '10-about.md')
+    public function actionIndex($file = '../README.md')
     {
         // TOOD: DRY(!)
         $cacheKey = 'github-markdown/toc';
@@ -66,7 +68,12 @@ class DefaultController extends Controller
     private function createHtml($file)
     {
         \Yii::trace("Creating HTML for '{$file}'", __METHOD__);
-        $markdown = file_get_contents($this->module->markdownUrl . '/' . $file);
+        try {
+            $markdown = file_get_contents(\Yii::getAlias($this->module->markdownUrl) . '/' . $file);
+        } catch (\Exception $e) {
+            \Yii::$app->session->setFlash("markdocs", "File '{$file}' not found,");
+        }
+
         $html     = Markdown::process($markdown, 'gfm');
         $html     = preg_replace('/<a href="(?!http)(.+\.md)">/U', '<a href="__INTERNAL_URL__$1">', $html);
 
