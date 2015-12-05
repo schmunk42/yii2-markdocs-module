@@ -25,21 +25,24 @@ class DefaultController extends Controller
      * Renders the documentation pages from github.com
      * @return string
      */
-    public function actionIndex($file = '../README.md')
+    public function actionIndex($file = null)
     {
+        if ($file === null) {
+            $file = $this->module->defaultIndexFile;
+        }
         // TOOD: DRY(!)
         $cacheKey = 'github-markdown/toc';
         $toc      = \Yii::$app->cache->get($cacheKey);
         if (!$toc) {
             $toc = $this->createHtml('README.md');
-            \Yii::$app->cache->set($cacheKey, $toc, 300);
+            \Yii::$app->cache->set($cacheKey, $toc, $this->module->cachingTime);
         }
 
         $cacheKey = 'github-markdown/' . $file;
         $html     = \Yii::$app->cache->get($cacheKey);
         if (!$html) {
             $html = $this->createHtml($file);
-            \Yii::$app->cache->set($cacheKey, $html, 1);
+            \Yii::$app->cache->set($cacheKey, $html, $this->module->cachingTime);
         }
 
         // exract headline - TODO: this should be done with the Markdown parser
@@ -69,9 +72,12 @@ class DefaultController extends Controller
     {
         \Yii::trace("Creating HTML for '{$file}'", __METHOD__);
         try {
-            $markdown = file_get_contents(\Yii::getAlias($this->module->markdownUrl) . '/' . $file);
+            $filePath = \Yii::getAlias($this->module->markdownUrl) . '/' . $file;
+            $markdown = file_get_contents($filePath);
+            \Yii::trace("Loaded markdown for '{$filePath}'", __METHOD__);
         } catch (\Exception $e) {
-            \Yii::$app->session->setFlash("markdocs", "File '{$file}' not found,");
+            \Yii::$app->session->addFlash("error", "File '{$file}' not found,");
+            return false;
         }
 
         $html     = Markdown::process($markdown, 'gfm');

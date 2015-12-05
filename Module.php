@@ -9,17 +9,30 @@ use yii\filters\AccessControl;
  */
 class Module extends \yii\base\Module
 {
+    /**
+     * @inheritdoc
+     */
     public $defaultRoute = 'default/index';
 
     /**
      * @var string url or local alias with markdown files
      */
-    public $markdownUrl = 'https://raw.githubusercontent.com/phundament/app/master/docs/';
+    public $markdownUrl = null;
+
+    /**
+     * @var string default markdown index file
+     */
+    public $defaultIndexFile = '../README.md';
 
     /**
      * @var string URL for fork link on bottom of page
      */
-    public $forkUrl = 'https://github.com/phundament/app/blob/master/docs/';
+    public $forkUrl = null;
+
+    /**
+     * @var integer value in seconds, how long to cache generated HTML
+     */
+    public $cachingTime = 1;
 
     /**
      * Restrict access permissions to admin user and users with auth-item 'module-controller'
