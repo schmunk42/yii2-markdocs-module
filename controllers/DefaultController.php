@@ -59,7 +59,7 @@ class DefaultController extends Controller
                 'html'     => $html,
                 'toc'      => $toc,
                 'headline' => $headline,
-                'forkUrl'  => $this->module->forkUrl . $file
+                'forkUrl'  => $this->module->forkUrl . '/' . $file
             ]
         );
     }

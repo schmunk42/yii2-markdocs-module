@@ -22,7 +22,7 @@ class Module extends \yii\base\Module
     /**
      * @var string default markdown index file
      */
-    public $defaultIndexFile = '../README.md';
+    public $defaultIndexFile = null;
 
     /**
      * @var string URL for fork link on bottom of page
@@ -60,5 +60,19 @@ class Module extends \yii\base\Module
                 ]
             ]
         ];
+    }
+
+    public function init()
+    {
+        parent::init();
+        if (\Yii::$app->has('settings')) {
+            $properties = ['markdownUrl', 'forkUrl', 'defaultIndexFile', 'cachingTime'];
+            $section = str_replace('\\', '.', __NAMESPACE__);
+            foreach ($properties as $property) {
+                if ($this->$property === null) {
+                    $this->$property = \Yii::$app->settings->get($property, $section);
+                }
+            }
+        }
     }
 }
