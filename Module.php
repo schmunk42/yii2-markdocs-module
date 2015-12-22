@@ -35,33 +35,32 @@ class Module extends \yii\base\Module
     public $cachingTime = 1;
 
     /**
-     * Restrict access permissions to admin user and users with auth-item 'module-controller'
+     * Restrict access permissions to admin user and users with auth-item 'module[_controller[_action]]'
      * @inheritdoc
      */
     public function behaviors()
     {
-        $modulePermission = str_replace('/', '_', $this->id);
-        $moduleControllerPermission = str_replace('/', '_', $this->id . '/' . \Yii::$app->controller->id);
-
         return [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
                         'allow' => true,
-                        'matchCallback' => function () use ($modulePermission, $moduleControllerPermission) {
-                            if (!(\Yii::$app->user->can($modulePermission) || (\Yii::$app->user->identity && \Yii::$app->user->identity->isAdmin))) {
-                                return \Yii::$app->user->can($moduleControllerPermission) || (\Yii::$app->user->identity && \Yii::$app->user->identity->isAdmin);
-                            } else {
-                                return true;
-                            }
+                        'matchCallback' => function ($rule, $action) {
+                            return \Yii::$app->user->can(
+                                $this->id.'_'.\Yii::$app->controller->id.'_'.$action->id,
+                                ['route' => true]
+                            );
                         },
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 
+    /**
+     * Try configuration from settings module, if a value is not set
+     */
     public function init()
     {
         parent::init();
