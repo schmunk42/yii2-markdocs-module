@@ -53,6 +53,8 @@ class DefaultController extends Controller
             $headline = $file;
         }
 
+        $this->registerClientScripts();
+
         return $this->render(
             'docs',
             [
@@ -88,6 +90,35 @@ class DefaultController extends Controller
         $html     = strtr($html, ['__PLACEHOLDER__' => '']);
 
         return $html;
+    }
+
+    private function registerClientScripts()
+    {
+        if ($this->module->enableEmojis) {
+
+            // TODO: move to asset bundle, don't force CDN
+            $this->view->registerJsFile('https://raw.githubusercontent.com/Ranks/emojify.js/master/dist/js/emojify.js',
+                ['position' => View::POS_HEAD]);
+
+            $this->view->registerJs('emojify.setConfig({
+  img_dir: \'http://tortue.me/emoji\',
+  emoji_image_extension: \'png\',
+  emoticons_enabled: true,
+  people_enabled: true,
+  nature_enabled: true,
+  objects_enabled: true,
+  places_enabled: true,
+  symbols_enabled: true
+});emojify.run()');
+
+            $this->view->registerCss('.emoji {
+    width: 1.25em;
+    height: 1.25em;
+    display: inline-block;
+    margin-bottom: 0.25em;
+}');
+
+        }
     }
 
 }

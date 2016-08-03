@@ -35,6 +35,11 @@ class Module extends \yii\base\Module
     public $cachingTime = 1;
 
     /**
+     * @var bool whether to convert emoji syntax to images
+     */
+    public $enableEmojis = false;
+
+    /**
      * Restrict access permissions to admin user and users with auth-item 'module[_controller[_action]]'
      * @inheritdoc
      */
