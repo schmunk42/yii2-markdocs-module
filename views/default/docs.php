@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'fork this page',
             $forkUrl,
             ['target' => '_blank']
-        ) ?> on GitHub.
+        ) ?>.
     </p>
     <?php endif; ?>
 </div>

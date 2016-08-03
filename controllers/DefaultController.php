@@ -13,6 +13,7 @@ use yii\base\ErrorException;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\View;
 
 /**
  * Class DefaultController
@@ -32,14 +33,14 @@ class DefaultController extends Controller
         }
         // TOOD: DRY(!)
         $cacheKey = 'github-markdown/toc';
-        $toc      = \Yii::$app->cache->get($cacheKey);
+        $toc = \Yii::$app->cache->get($cacheKey);
         if (!$toc) {
             $toc = $this->createHtml('README.md');
             \Yii::$app->cache->set($cacheKey, $toc, $this->module->cachingTime);
         }
 
-        $cacheKey = 'github-markdown/' . $file;
-        $html     = \Yii::$app->cache->get($cacheKey);
+        $cacheKey = 'github-markdown/'.$file;
+        $html = \Yii::$app->cache->get($cacheKey);
         if (!$html) {
             $html = $this->createHtml($file);
             \Yii::$app->cache->set($cacheKey, $html, $this->module->cachingTime);
@@ -58,10 +59,10 @@ class DefaultController extends Controller
         return $this->render(
             'docs',
             [
-                'html'     => $html,
-                'toc'      => $toc,
+                'html' => $html,
+                'toc' => $toc,
                 'headline' => $headline,
-                'forkUrl'  => $this->module->forkUrl . '/' . $file
+                'forkUrl' => $this->module->forkUrl.'/'.$file
             ]
         );
     }
@@ -74,7 +75,7 @@ class DefaultController extends Controller
     {
         \Yii::trace("Creating HTML for '{$file}'", __METHOD__);
         try {
-            $filePath = \Yii::getAlias($this->module->markdownUrl) . '/' . $file;
+            $filePath = \Yii::getAlias($this->module->markdownUrl).'/'.$file;
             $markdown = file_get_contents($filePath);
             \Yii::trace("Loaded markdown for '{$filePath}'", __METHOD__);
         } catch (\Exception $e) {
@@ -82,12 +83,12 @@ class DefaultController extends Controller
             return false;
         }
 
-        $html     = Markdown::process($markdown, 'gfm');
-        $html     = preg_replace('/<a href="(?!http)(.+\.md)">/U', '<a href="__INTERNAL_URL__$1">', $html);
+        $html = Markdown::process($markdown, 'gfm');
+        $html = preg_replace('/<a href="(?!http)(.+\.md)">/U', '<a href="__INTERNAL_URL__$1">', $html);
 
-        $dummyUrl = Url::to(['/docs', 'file' => '__PLACEHOLDER__']);
-        $html     = strtr($html, ['__INTERNAL_URL__' => $dummyUrl]);
-        $html     = strtr($html, ['__PLACEHOLDER__' => '']);
+        $dummyUrl = Url::to(['/'.$this->module->id, 'file' => '__PLACEHOLDER__']);
+        $html = strtr($html, ['__INTERNAL_URL__' => $dummyUrl]);
+        $html = strtr($html, ['__PLACEHOLDER__' => '']);
 
         return $html;
     }

@@ -71,7 +71,7 @@ class Module extends \yii\base\Module
         parent::init();
         if (\Yii::$app->has('settings')) {
             $properties = ['markdownUrl', 'forkUrl', 'defaultIndexFile', 'cachingTime'];
-            $section = str_replace('\\', '.', __NAMESPACE__);
+            $section = $this->id;
             foreach ($properties as $property) {
                 if ($this->$property === null) {
                     $this->$property = \Yii::$app->settings->get($property, $section);
