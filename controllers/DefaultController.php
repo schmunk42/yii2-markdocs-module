@@ -81,9 +81,6 @@ class DefaultController extends Controller
         \Yii::trace("Creating HTML for '{$file}'", __METHOD__);
         try {
             $filePath = \Yii::getAlias($this->module->markdownUrl).'/'.$file;
-
-            return ':x:';
-
             $markdown = file_get_contents($filePath);
             \Yii::trace("Loaded markdown for '{$filePath}'", __METHOD__);
         } catch (\Exception $e) {
