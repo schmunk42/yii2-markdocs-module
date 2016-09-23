@@ -1,9 +1,5 @@
-Yii 2.0 Markdown Docs Module
-============================
-
-:warning: **Module is under development.**
-
-------
+yii2-markdocs-module
+====================
 
 Renders markdown files from URLs or local files in views.
 
@@ -40,3 +36,7 @@ Keys
 - `forkUrl`
 - `defaultIndexFile`
 - `cachingTime`
+
+---
+
+#### ![dmstr logo](http://t.phundament.com/dmstr-16-cropped.png) Built by [dmstr](http://diemeisterei.de)        
