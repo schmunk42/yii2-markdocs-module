@@ -9,6 +9,7 @@
 
 namespace schmunk42\markdocs\controllers;
 
+use dmstr\web\EmojifyJsAsset;
 use yii\base\ErrorException;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
@@ -28,9 +29,12 @@ class DefaultController extends Controller
      */
     public function actionIndex($file = null)
     {
+
         if ($file === null) {
             $file = $this->module->defaultIndexFile;
         }
+
+
         // TOOD: DRY(!)
         $cacheKey = 'github-markdown/toc';
         $toc = \Yii::$app->cache->get($cacheKey);
@@ -38,6 +42,7 @@ class DefaultController extends Controller
             $toc = $this->createHtml('README.md');
             \Yii::$app->cache->set($cacheKey, $toc, $this->module->cachingTime);
         }
+
 
         $cacheKey = 'github-markdown/'.$file;
         $html = \Yii::$app->cache->get($cacheKey);
@@ -76,6 +81,9 @@ class DefaultController extends Controller
         \Yii::trace("Creating HTML for '{$file}'", __METHOD__);
         try {
             $filePath = \Yii::getAlias($this->module->markdownUrl).'/'.$file;
+
+            return ':x:';
+
             $markdown = file_get_contents($filePath);
             \Yii::trace("Loaded markdown for '{$filePath}'", __METHOD__);
         } catch (\Exception $e) {
@@ -96,29 +104,7 @@ class DefaultController extends Controller
     private function registerClientScripts()
     {
         if ($this->module->enableEmojis) {
-
-            // TODO: move to asset bundle, don't force CDN
-            $this->view->registerJsFile('https://raw.githubusercontent.com/Ranks/emojify.js/master/dist/js/emojify.js',
-                ['position' => View::POS_HEAD]);
-
-            $this->view->registerJs('emojify.setConfig({
-  img_dir: \'http://tortue.me/emoji\',
-  emoji_image_extension: \'png\',
-  emoticons_enabled: true,
-  people_enabled: true,
-  nature_enabled: true,
-  objects_enabled: true,
-  places_enabled: true,
-  symbols_enabled: true
-});emojify.run()');
-
-            $this->view->registerCss('.emoji {
-    width: 1.25em;
-    height: 1.25em;
-    display: inline-block;
-    margin-bottom: 0.25em;
-}');
-
+            EmojifyJsAsset::register($this->view);
         }
     }
 
