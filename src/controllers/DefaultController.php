@@ -43,7 +43,7 @@ class DefaultController extends Controller
         $cacheKey = 'github-markdown/toc';
         $toc = \Yii::$app->cache->get($cacheKey);
         if (!$toc) {
-            $toc = $this->createHtml('README.md');
+            $toc = $this->createHtml('README.md', true);
             \Yii::$app->cache->set($cacheKey, $toc, $this->module->cachingTime);
         }
 
@@ -71,6 +71,7 @@ class DefaultController extends Controller
                 'html' => $html,
                 'toc' => $toc,
                 'headline' => $headline,
+                'breadcrumbs' => explode('/', $file),
                 'forkUrl' => $this->module->forkUrl.'/'.$file
             ]
         );
@@ -80,7 +81,7 @@ class DefaultController extends Controller
      * Helper function for the docs action
      * @return string
      */
-    private function createHtml($file)
+    private function createHtml($file, $useRootPath = false)
     {
         \Yii::trace("Creating HTML for '{$file}'", __METHOD__);
         try {
@@ -92,8 +93,9 @@ class DefaultController extends Controller
             return false;
         }
 
+        $_slash = $useRootPath ? '' : '/';
         $html = Markdown::process($markdown, 'gfm');
-        $html = preg_replace('/<a href="(?!http)(.+\.md)">/U', '<a href="__INTERNAL_URL__$1">', $html);
+        $html = preg_replace('|<a href="(?!http)'.$_slash.'(.+\.md)">|U', '<a href="__INTERNAL_URL__$1">', $html);
 
         $dummyUrl = Url::to(['/'.$this->module->id.'/default/index', 'file' => '__PLACEHOLDER__']);
         $html = strtr($html, ['__INTERNAL_URL__' => $dummyUrl]);

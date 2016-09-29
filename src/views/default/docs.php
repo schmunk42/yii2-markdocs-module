@@ -2,6 +2,7 @@
 $this->title = $headline;
 $this->params['breadcrumbs'][] = ['url' => ['/docs'], 'label' => 'Docs'];
 $this->params['breadcrumbs'][] = ['url' => ['/docs/default/index'], 'label' => 'Guide'];
+$this->params['breadcrumbs'][] = ['label' => ucfirst($breadcrumbs[0])];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -19,13 +20,13 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
     <?php if ($forkUrl): ?>
-    <p class="text-muted text-right small">
-        <br/><br/>
-        Help us to improve the documentation, <?= \yii\helpers\Html::a(
-            'fork this page',
-            $forkUrl,
-            ['target' => '_blank']
-        ) ?>.
-    </p>
+        <p class="text-muted text-right small">
+            <br/><br/>
+            Help us to improve the documentation, <?= \yii\helpers\Html::a(
+                'fork this page',
+                $forkUrl,
+                ['target' => '_blank']
+            ) ?>.
+        </p>
     <?php endif; ?>
 </div>
