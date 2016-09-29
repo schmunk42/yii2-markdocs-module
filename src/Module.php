@@ -3,12 +3,20 @@
 namespace schmunk42\markdocs;
 
 use yii\filters\AccessControl;
+use dmstr\web\traits\AccessBehaviorTrait;
 
 /**
  * Markdown parser module
  */
 class Module extends \yii\base\Module
 {
+
+    /**
+     * Restrict access permissions to admin user and users with auth-item 'module[_controller[_action]]'
+     * @inheritdoc
+     */
+    use AccessBehaviorTrait;
+
     /**
      * @inheritdoc
      */
@@ -30,6 +38,11 @@ class Module extends \yii\base\Module
     public $forkUrl = null;
 
     /**
+     * @var string 
+     */
+    public $htmlUrl = null;
+
+    /**
      * @var integer value in seconds, how long to cache generated HTML
      */
     public $cachingTime = 1;
@@ -39,29 +52,6 @@ class Module extends \yii\base\Module
      */
     public $enableEmojis = false;
 
-    /**
-     * Restrict access permissions to admin user and users with auth-item 'module[_controller[_action]]'
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                            return \Yii::$app->user->can(
-                                $this->id.'_'.\Yii::$app->controller->id.'_'.$action->id,
-                                ['route' => true]
-                            );
-                        },
-                    ],
-                ],
-            ],
-        ];
-    }
 
     /**
      * Try configuration from settings module, if a value is not set
@@ -70,7 +60,7 @@ class Module extends \yii\base\Module
     {
         parent::init();
         if (\Yii::$app->has('settings')) {
-            $properties = ['markdownUrl', 'forkUrl', 'defaultIndexFile', 'cachingTime'];
+            $properties = ['markdownUrl', 'forkUrl', 'defaultIndexFile', 'cachingTime', 'htmlUrl'];
             $section = $this->id;
             foreach ($properties as $property) {
                 if ($this->$property === null) {

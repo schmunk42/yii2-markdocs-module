@@ -12,8 +12,11 @@
     ],
     "require": {
         "yiisoft/yii2": "2.*",
-        "pheme/yii2-settings": "~0.3",
+        "dmstr/yii2-web": "~0.3",
         "dmstr/yii2-emojifyjs-asset": "~0.1"
+    },
+    "suggest": {
+        "pheme/yii2-settings": "Define markdocs module configuration via web UI"
     },
     "autoload": {
         "psr-4": {

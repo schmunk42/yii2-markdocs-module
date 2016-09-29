@@ -16,8 +16,8 @@ return [
         'cache' => '\yii\caching\DummyCache',
         'urlManager' => [
             'rules' => [
-                'api/<file:[a-zA-Z0-9_\-\./\+]*>.html' => 'markdocs/api/index',
-                'api/<file:[a-zA-Z0-9_\-\./\+]*>' => 'markdocs/api/index',
+                'api/<file:[a-zA-Z0-9_\-\./\+]*>.html' => 'markdocs/html/index',
+                'api/<file:[a-zA-Z0-9_\-\./\+]*>' => 'markdocs/html/index',
             ]
         ]
     ],
@@ -25,7 +25,7 @@ return [
         'markdocs' => [
             'class' => 'schmunk42\markdocs\Module',
             'markdownUrl' => 'https://raw.githubusercontent.com/dmstr/docs-phd5/master/help',
-            'apiHtmlUrl' => 'https://raw.githubusercontent.com/Qti3e/Impress-full/master'
+            'htmlUrl' => 'http://docs.phundament.com/5.0.0-beta3'
         ]
     ]
 ];

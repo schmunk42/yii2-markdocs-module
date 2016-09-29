@@ -14,6 +14,7 @@ use yii\base\ErrorException;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\HttpException;
 use yii\web\View;
 
 /**
@@ -32,8 +33,11 @@ class DefaultController extends Controller
 
         if ($file === null) {
             $file = $this->module->defaultIndexFile;
+        } else {
+            if (!preg_match('/^[a-zA-Z0-9-\/]+\.md$/', $file)) {
+                throw new HttpException(400,'Parameter validation failed');
+            }
         }
-
 
         // TOOD: DRY(!)
         $cacheKey = 'github-markdown/toc';
