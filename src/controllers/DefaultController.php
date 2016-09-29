@@ -95,7 +95,7 @@ class DefaultController extends Controller
         $html = Markdown::process($markdown, 'gfm');
         $html = preg_replace('/<a href="(?!http)(.+\.md)">/U', '<a href="__INTERNAL_URL__$1">', $html);
 
-        $dummyUrl = Url::to(['/'.$this->module->id, 'file' => '__PLACEHOLDER__']);
+        $dummyUrl = Url::to(['/'.$this->module->id.'/default/index', 'file' => '__PLACEHOLDER__']);
         $html = strtr($html, ['__INTERNAL_URL__' => $dummyUrl]);
         $html = strtr($html, ['__PLACEHOLDER__' => '']);
 

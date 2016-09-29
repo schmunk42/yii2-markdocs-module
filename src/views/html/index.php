@@ -1,6 +1,7 @@
 <?php
-#$this->title = $headline;
+$this->title = $headline;
 $this->params['breadcrumbs'][] = ['url' => ['/docs'], 'label' => 'Docs'];
+$this->params['breadcrumbs'][] = ['url' => ['/docs/html/index', 'file'=>'index'], 'label' => 'API'];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
