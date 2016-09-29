@@ -37,6 +37,20 @@ Keys
 - `defaultIndexFile`
 - `cachingTime`
 
+### Render Markdown `markdocs/default`
+
+Can render local files or raw data from an URL.
+
+### Render API documentation `markdocs/html`
+
+Example command for `dmstr/phd5-app`
+
+    $ php -dmemory_limit=512M vendor/bin/apidoc api \
+        --template=online \
+        --exclude=yiisoft,Test,Tests,test,tests,ezyang,phpdocumentor,nikic,php_codesniffer,phptidy,php-cs-fixer,faker \
+        src/,vendor/ \
+        runtime/html
+
 ---
 
 #### ![dmstr logo](http://t.phundament.com/dmstr-16-cropped.png) Built by [dmstr](http://diemeisterei.de)        
