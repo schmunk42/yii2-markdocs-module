@@ -1,0 +1,19 @@
+version: '2'
+services:
+  php:
+    image: dmstr/yii2-app:0.4.0
+    environment:
+      - APP_CONFIG_FILE=/app/vendor/schmunk42/yii2-markdocs-module/tests/config.php
+    volumes:
+      - /app/web
+      - ../:/app/vendor/schmunk42/yii2-markdocs-module
+  web:
+    image: phundament/nginx-one:1.9-5.0.2
+    environment:
+      - FASTCGI_PASS_HOST=php
+    depends_on:
+      - php
+    volumes_from:
+      - php
+    ports:
+      - 80
