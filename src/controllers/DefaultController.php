@@ -39,21 +39,22 @@ class DefaultController extends Controller
             }
         }
 
-        // TOOD: DRY(!)
+        // TODO: DRY(!)
         $cacheKey = 'github-markdown/toc';
         $toc = \Yii::$app->cache->get($cacheKey);
         if (!$toc) {
             $toc = $this->createHtml('README.md', true);
             \Yii::$app->cache->set($cacheKey, $toc, $this->module->cachingTime);
         }
-
-
         $cacheKey = 'github-markdown/'.$file;
         $html = \Yii::$app->cache->get($cacheKey);
         if (!$html) {
             $html = $this->createHtml($file);
             \Yii::$app->cache->set($cacheKey, $html, $this->module->cachingTime);
         }
+
+        // TODO: this is a hotfix for image URLs
+        $html = str_replace('src="./', 'src="'.$this->module->markdownUrl.'/', $html);
 
         // exract headline - TODO: this should be done with the Markdown parser
         preg_match("/\<h[1-3]\>(.*)\<\/h[1-3]\>/", $html, $matches);
