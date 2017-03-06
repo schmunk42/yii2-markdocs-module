@@ -73,7 +73,7 @@ class DefaultController extends Controller
                 'toc' => $toc,
                 'headline' => $headline,
                 'breadcrumbs' => explode('/', $file),
-                'forkUrl' => $this->module->forkUrl.'/'.$file
+                'forkUrl' => (!empty($this->module->forkUrl)) ? $this->module->forkUrl : false,
             ]
         );
     }
