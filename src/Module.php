@@ -52,6 +52,11 @@ class Module extends \yii\base\Module
      */
     public $enableEmojis = false;
 
+    /**
+     * @var bool whether to convert emoji syntax to images
+     */
+    public $enableMermaid = false;
+
 
     /**
      * Try configuration from settings module, if a value is not set

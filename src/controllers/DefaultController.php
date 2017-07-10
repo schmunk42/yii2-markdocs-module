@@ -10,6 +10,7 @@
 namespace schmunk42\markdocs\controllers;
 
 use dmstr\web\EmojifyJsAsset;
+use dmstr\web\MermaidAsset;
 use yii\base\ErrorException;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
@@ -84,9 +85,9 @@ class DefaultController extends Controller
      */
     private function createHtml($file, $useRootPath = false)
     {
-        \Yii::trace("Creating HTML for '{$file}'", __METHOD__);
+        $filePath = \Yii::getAlias($this->module->markdownUrl).'/'.$file;
+        \Yii::trace("Creating HTML for '{$filePath}'", __METHOD__);
         try {
-            $filePath = \Yii::getAlias($this->module->markdownUrl).'/'.$file;
             $markdown = file_get_contents($filePath);
             \Yii::trace("Loaded markdown for '{$filePath}'", __METHOD__);
         } catch (\Exception $e) {
@@ -109,6 +110,10 @@ class DefaultController extends Controller
     {
         if ($this->module->enableEmojis) {
             EmojifyJsAsset::register($this->view);
+        }
+        if ($this->module->enableMermaid) {
+            MermaidAsset::register($this->view);
+            \Yii::$app->view->registerJs("mermaid.initialize({startOnLoad:true});");
         }
     }
 

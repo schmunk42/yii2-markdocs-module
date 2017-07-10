@@ -13,7 +13,8 @@
     "require": {
         "yiisoft/yii2": "2.*",
         "dmstr/yii2-web": "~0.3",
-        "dmstr/yii2-emojifyjs-asset": "~0.1"
+        "dmstr/yii2-emojifyjs-asset": "~0.1",
+        "dmstr/yii2-mermaid-asset": "~0.0"
     },
     "suggest": {
         "pheme/yii2-settings": "Define markdocs module configuration via web UI"
