@@ -41,13 +41,13 @@ class DefaultController extends Controller
         }
 
         // TODO: DRY(!)
-        $cacheKey = 'github-markdown/toc';
+        $cacheKey = $this->module->id.'/github-markdown/toc';
         $toc = \Yii::$app->cache->get($cacheKey);
         if (!$toc) {
             $toc = $this->createHtml('README.md', true);
             \Yii::$app->cache->set($cacheKey, $toc, $this->module->cachingTime);
         }
-        $cacheKey = 'github-markdown/'.$file;
+        $cacheKey = $this->module->id.'/github-markdown/'.$file;
         $html = \Yii::$app->cache->get($cacheKey);
         if (!$html) {
             $html = $this->createHtml($file);
