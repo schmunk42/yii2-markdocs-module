@@ -5,6 +5,14 @@ Renders markdown files from URLs or local files in views.
 
 You can either display the documentation of your online GitHub repo nicely rendered in a custom theme. Or provide application documention in the backend from local files.
 
+
+Requirements
+------------
+
+- configured `pheme/yii2-settings` module and component
+- configured RBAC access control, permission: `docs_default`
+
+
 Installation
 ------------
 
@@ -16,12 +24,10 @@ Run
 composer require schmunk42/yii2-markdocs-module "*"
 ```
 
+Configuration
+-------------
 
-Requirements
-------------
 
-- configured `pheme/yii2-settings` module and component
-- configured RBAC access control, permission: `docs_default`
 
 Usage
 -----
