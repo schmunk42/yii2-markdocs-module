@@ -1,0 +1,13 @@
+.toc-file ul {
+    padding: 0;
+}
+.toc-file .toc-h2 {
+    margin-left: 10px
+}
+.toc-file .toc-h3 {
+    margin-left: 20px
+}
+.toc-file .toc-visible {
+    color: #000;
+    font-weight: bold;
+}
