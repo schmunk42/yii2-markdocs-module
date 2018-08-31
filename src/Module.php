@@ -67,9 +67,15 @@ class Module extends \yii\base\Module
         if (\Yii::$app->has('settings')) {
             $properties = ['markdownUrl', 'forkUrl', 'defaultIndexFile', 'cachingTime', 'htmlUrl'];
             $section = $this->id;
+            $prefix = '';
+
+            if (\Yii::$app->request->get('schema')) {
+                $prefix = \Yii::$app->request->get('schema').'.';
+            }
+
             foreach ($properties as $property) {
                 if ($this->$property === null) {
-                    $this->$property = \Yii::$app->settings->get($property, $section);
+                    $this->$property = \Yii::$app->settings->get($prefix.$property, $section);
                 }
             }
         }

@@ -96,8 +96,9 @@ class DefaultController extends Controller
         }
 
         $_slash = $useRootPath ? '' : '/';
+        $schema = \Yii::$app->request->get('schema');
         $html = Markdown::process($markdown, 'gfm');
-        $html = preg_replace('|<a href="(?!http)'.$_slash.'(.+\.md)">|U', '<a href="__INTERNAL_URL__$1">', $html);
+        $html = preg_replace('|<a href="(?!http)'.$_slash.'(.+\.md)">|U', '<a href="__INTERNAL_URL__$1&schema='.$schema.'">', $html);
 
         $dummyUrl = Url::to(['/'.$this->module->id.'/default/index', 'file' => '__PLACEHOLDER__']);
         $html = strtr($html, ['__INTERNAL_URL__' => $dummyUrl]);

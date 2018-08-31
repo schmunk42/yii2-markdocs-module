@@ -26,9 +26,11 @@ Requirements
 Usage
 -----
 
-### Settings module
+### Configuration
 
-Section: `schmunk42.markdocs`
+Via **Settings** module
+
+Section: `<module-id>`
 
 Keys
 
@@ -36,6 +38,8 @@ Keys
 - `forkUrl`
 - `defaultIndexFile`
 - `cachingTime`
+
+Keys can also be prefixed with a schema key, eg `guide.markdownUrl` and selected via URL parameter `docs/?schema=guide`, so you can include multiple documentations within a single module.
 
 ### Render Markdown `markdocs/default`
 
