@@ -74,6 +74,7 @@ class DefaultController extends Controller
                 'toc' => $toc,
                 'headline' => $headline,
                 'breadcrumbs' => explode('/', $file),
+                'label' => \Yii::$app->request->get('schema'),
                 'forkUrl' => (!empty($this->module->forkUrl)) ? $this->module->forkUrl : false,
             ]
         );
@@ -97,8 +98,10 @@ class DefaultController extends Controller
 
         $_slash = $useRootPath ? '' : '/';
         $schema = \Yii::$app->request->get('schema');
+        $schemaUrlParam = $schema ? '?schema='.$schema : '';
+
         $html = Markdown::process($markdown, 'gfm');
-        $html = preg_replace('|<a href="(?!http)'.$_slash.'(.+\.md)">|U', '<a href="__INTERNAL_URL__$1&schema='.$schema.'">', $html);
+        $html = preg_replace('|<a href="(?!http)'.$_slash.'(.+\.md)">|U', '<a href="__INTERNAL_URL__$1'.$schemaUrlParam.'">', $html);
 
         $dummyUrl = Url::to(['/'.$this->module->id.'/default/index', 'file' => '__PLACEHOLDER__']);
         $html = strtr($html, ['__INTERNAL_URL__' => $dummyUrl]);
