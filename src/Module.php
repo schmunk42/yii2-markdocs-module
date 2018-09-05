@@ -69,7 +69,8 @@ class Module extends \yii\base\Module
             $section = $this->id;
             $prefix = '';
 
-            if (\Yii::$app->request->get('schema')) {
+            // read properties with prefix in web application
+            if (\Yii::$app instanceof \yii\web\Application && \Yii::$app->request->get('schema')) {
                 $prefix = \Yii::$app->request->get('schema').'.';
             }
 
