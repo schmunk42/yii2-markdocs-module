@@ -31,11 +31,13 @@ class DefaultController extends Controller
      */
     public function actionIndex($file = null)
     {
+        $schema = \Yii::$app->request->get('schema');
 
         if ($file === null) {
             $file = $this->module->defaultIndexFile;
         } else {
-            if (!preg_match('/^[a-zA-Z0-9-\/]+\.md$/', $file)) {
+            if (!preg_match('/^[a-zA-Z0-9-\/\.]+\.md$/', $file)) {
+                \Yii::error("Failed to validate {$file}");
                 throw new HttpException(400,'Parameter validation failed');
             }
         }
@@ -50,7 +52,7 @@ class DefaultController extends Controller
         $cacheKey = $this->module->id.'/github-markdown/'.$file;
         $html = \Yii::$app->cache->get($cacheKey);
         if (!$html) {
-            $html = $this->createHtml($file);
+            $html = $this->createHtml($file, true);
             \Yii::$app->cache->set($cacheKey, $html, $this->module->cachingTime);
         }
 
@@ -67,15 +69,20 @@ class DefaultController extends Controller
 
         $this->registerClientScripts();
 
+        $filePath = $this->resolveFilePath($file);
+        $forkUrl = (!empty($this->module->forkUrl)) ? $this->module->forkUrl.'/'.$file : false;
+
         return $this->render(
             'docs',
             [
                 'html' => $html,
+                'file' => $filePath,
                 'toc' => $toc,
                 'headline' => $headline,
                 'breadcrumbs' => explode('/', $file),
                 'label' => \Yii::$app->request->get('schema'),
-                'forkUrl' => (!empty($this->module->forkUrl)) ? $this->module->forkUrl : false,
+                'schema' => $schema,
+                'forkUrl' => $forkUrl
             ]
         );
     }
@@ -86,24 +93,25 @@ class DefaultController extends Controller
      */
     private function createHtml($file, $useRootPath = false)
     {
-        $filePath = \Yii::getAlias($this->module->markdownUrl).'/'.$file;
+        $filePath = $this->resolveFilePath($file);
         \Yii::trace("Creating HTML for '{$filePath}'", __METHOD__);
         try {
             $markdown = file_get_contents($filePath);
             \Yii::trace("Loaded markdown for '{$filePath}'", __METHOD__);
         } catch (\Exception $e) {
+            \Yii::error("File {$filePath} not found.", __METHOD__);
             \Yii::$app->session->addFlash("error", "File '{$file}' not found,");
             return false;
         }
 
         $_slash = $useRootPath ? '' : '/';
         $schema = \Yii::$app->request->get('schema');
-        $schemaUrlParam = $schema ? '?schema='.$schema : '';
+        $schemaUrlParam = $schema ? '&schema='.$schema : '';
 
         $html = Markdown::process($markdown, 'gfm');
-        $html = preg_replace('|<a href="(?!http)'.$_slash.'(.+\.md)">|U', '<a href="__INTERNAL_URL__$1'.$schemaUrlParam.'">', $html);
+        $html = preg_replace('|<a href="(?!http)'.$_slash.'(.+\.md)">|U', '<a href="__INTERNAL_URL__$1">', $html);
 
-        $dummyUrl = Url::to(['/'.$this->module->id.'/default/index', 'file' => '__PLACEHOLDER__']);
+        $dummyUrl = Url::to(['/'.$this->module->id.'/default/index', 'schema' => $schema, 'file' => '__PLACEHOLDER__']);
         $html = strtr($html, ['__INTERNAL_URL__' => $dummyUrl]);
         $html = strtr($html, ['__PLACEHOLDER__' => '']);
 
@@ -119,6 +127,10 @@ class DefaultController extends Controller
             MermaidAsset::register($this->view);
             \Yii::$app->view->registerJs("mermaid.initialize({startOnLoad:true});");
         }
+    }
+
+    private function resolveFilePath($file) {
+        return \Yii::getAlias($this->module->markdownUrl).'/'.$file;
     }
 
 }
