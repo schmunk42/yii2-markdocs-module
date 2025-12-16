@@ -13,11 +13,11 @@
     "require": {
         "yiisoft/yii2": "2.*",
         "dmstr/yii2-web": "~0.3 || ^0.4.0 || ^1.0.0",
-        "dmstr/yii2-emojifyjs-asset": "~0.1",
-        "dmstr/yii2-mermaid-asset": "~0.0 || ^1.0"
+        "dmstr/yii2-emojifyjs-asset": "~0.1"
     },
     "suggest": {
-        "pheme/yii2-settings": "Define markdocs module configuration via web UI"
+        "pheme/yii2-settings": "Define markdocs module configuration via web UI",
+        "dmstr/yii2-mermaid-asset": "Asset bundle for mermaid diagrams"
     },
     "autoload": {
         "psr-4": {
